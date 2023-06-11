@@ -9,14 +9,34 @@ from scipy.ndimage.filters import gaussian_filter1d
 
 
 class Ising2D:
+    r"""
+    Class for the 2D Ising model.
+
+    Parameters
+    ----------
+    L : int
+        length of the square lattice.
+    T : float
+        temperature.
+    nsteps : int
+        number of Monte Carlo steps.
+    J : float
+        exchange constant.
+    H : array-like
+        magnetic field.
+    """
     def __init__(self, L, T, nsteps, J, H):
-        r"""hola"""
-        self.L = L # arista de la red cuadrada
-        self.T = T # temperatura
-        self.nsteps = nsteps # número de pasos de montecarlo
-        self.J = J # Constante de intercambio
-        self.H = H # Campo Magnético
-        self.N = L * L # número de espines
+        r"""
+        Initializes the Heisenberg2D object with the specified parameters.
+        """
+
+
+        self.L = L 
+        self.T = T 
+        self.nsteps = nsteps 
+        self.J = J 
+        self.H = H 
+        self.N = L * L
         self.beta = 1.0 / T
         self.nbr = {i: ((i // L) * L + (i + 1) % L, (i + L) % self.N,
                         (i // L) * L + (i - 1) % L, (i - L) % self.N) \
@@ -26,18 +46,67 @@ class Ising2D:
         self.iso = self.ising_2d()
 
     def iso2(self):
-        r"""hola x2"""
+        r"""
+        Performs an inversion on the magnetic field H and returns a new configuration.
+
+        Returns:
+        - iso2 : tuple
+            results of the Ising model with inverted magnetic field.
+        """
+
         self.H = np.flip(self.H)
         iso2 = self.ising_2d()
         return iso2
 
     def x_y(self, k):
+        r"""
+        Converts an index k to the corresponding (x, y) coordinates in the square lattice.
+
+        Parameters
+        ----------
+        k : int
+            index of the site in the lattice.
+
+        Returns:
+        x : int
+            x-coordinate corresponding to index k.
+        y: int
+            y-coordinate corresponding to index k.
+        """
         y = k // self.L
         x = k - y * self.L
         return x, y
 
     # funcion para el modelo de Ising
     def ising_2d(self):
+        r"""
+        Implements the 2D Ising model.
+
+        Returns
+        -------
+        iso : tuple
+            results of the Ising model.
+        R : array
+            initial configuration of random spins.
+        conf1 : array
+                initial configuration of spins R.
+        S : array
+            final configuration of spins after nsteps of Monte Carlo.
+        conf : array
+            final configuration of spins S.
+        avg_energy : float
+            average energy per site.
+        E : list
+            list of energy per site at each Monte Carlo step.
+        Mag : list
+            list of magnetizations per site at each Monte Carlo step.
+        E_1 : list
+            cumulative energy at each Monte Carlo step.
+        itera : list
+            list of Monte Carlo steps.
+        conf_int : array
+            intermediate configuration of spins.
+        """
         energy = 0
         N = self.L * self.L
         beta = 1.0 / self.T
@@ -91,11 +160,18 @@ class Ising2D:
 
 
     # función de ajuste al modelo de tangente hiperbólica
+
     def tanh(self, x, a, b, c):
+        r"""
+        Hyperbolic tangent function used for curve fitting.
+        """
         return a * np.tanh(b * x + c)
 
     # Ajustemos la curva de la isotermas para T1 T2 y T3 y grafiquemos con subplots
     def plot_ajuste(self):
+        """
+        Fits the isotropic curves to a hyperbolic tangent model and plots the results.
+        """
         popt, pcov = curve_fit(self.tanh, self.H, self.iso[6])
 
         # graficar ajuste
@@ -110,6 +186,9 @@ class Ising2D:
 
     # graficar histeresis
     def plot_histeresis(self):
+        """
+        Plots the hysteresis loop for the Ising model.
+        """
         plt.figure(figsize=(10, 8))
         plt.title("Histeresis para un ferromagneto en el modelo de ising en 2D", fontsize=20)
         plt.plot(np.arange(self.H[0], self.H[-1], 0.5), self.iso[6], label="T={}K".format(self.T), color="green")
@@ -124,6 +203,9 @@ class Ising2D:
 
     # graficar magnetizacion
     def plot_magnetizacion(self):
+        r"""
+        Plots the magnetization as a function of the magnetic field.
+        """
         plt.figure(figsize=(10, 6))
         plt.plot(self.H, self.iso[6], 'o', color='red')
         plt.xlabel('Campo magnético')
@@ -135,6 +217,9 @@ class Ising2D:
 
     # graficar energía
     def plot_energia(self):
+        """
+        Plots the energy as a function of the magnetic field.
+        """
         plt.figure(figsize=(10, 6))
         plt.plot(self.H, self.iso[5], 'o', color='blue')
         plt.xlabel('Campo magnético')
@@ -146,6 +231,9 @@ class Ising2D:
 
     # graficar energía en función de las iteraciones
     def plot_energia_itera(self):
+        """
+        Plots the energy as a function of the Monte Carlo iterations.
+        """
         plt.figure(figsize=(10, 6))
         plt.plot(self.iso[8], self.iso[7], 'o', color='blue')
         plt.xlabel('Iteración')
@@ -157,6 +245,9 @@ class Ising2D:
 
     # graficar configuraciones
     def plot_configuraciones(self):
+        """
+        Plots the initial, intermediate, and final configurations of spins.
+        """
         plt.subplot(1,3,1)
         plt.imshow(self.iso[1], extent=[0, self.L, 0, self.L], interpolation='nearest')
         plt.xlabel("x",fontsize=10)
@@ -179,6 +270,7 @@ class Ising2D:
 # clase heredada para realizar las gráficas de Energía, Magnetización y Calor especifíco en función de la temperatua
 class IsingTemp(Ising2D):
     def __init__(self, L, T, nsteps, J, H, nt, eq_steps, mc_steps, t_array):
+        """hola"""
         super().__init__(L, T, nsteps, J, H)
         self.nt = nt
         self.eq_steps = eq_steps
