@@ -8,7 +8,7 @@ Paramagnetismo y Ferromagnetismo: Simulación con Monte Carlo
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contenidos:
 
    Introducción <introduccion>
    Ising <ising>
