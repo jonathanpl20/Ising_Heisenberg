@@ -176,6 +176,7 @@ class Ising2D:
 
         # graficar ajuste
         plt.figure(figsize=(10, 8))
+        plt.title("Isotermas  y ajuste para un ferromagneto en el modelo de ising en 2D", fontsize=12)
         plt.plot(self.H, self.iso[6], label="T={}K".format(self.T), color="red")
         plt.plot(self.H, self.tanh(self.H, *popt), '*', label="Ajuste", color="black")
         plt.grid()
@@ -189,13 +190,14 @@ class Ising2D:
         """
         Plots the hysteresis loop for the Ising model.
         """
-        plt.figure(figsize=(10, 8))
+        plt.figure(figsize=(10, 6))
         plt.title("Histeresis para un ferromagneto en el modelo de ising en 2D", fontsize=20)
         plt.plot(np.arange(self.H[0], self.H[-1], 0.5), self.iso[6], label="T={}K".format(self.T), color="green")
         plt.plot(np.arange(self.H[-1], self.H[0], -0.5), self.iso2()[6], label="T={}K".format(self.T), color="black")
         plt.xlabel("H", fontsize=20)
         plt.ylabel("M", fontsize=20)
         plt.xlim(-5, 5)
+        plt.grid()
         plt.legend()
         plt.show()
 
@@ -243,26 +245,42 @@ class Ising2D:
 
         return
 
+    def plot_isotermas(self):
+        plt.figure(figsize=(10, 6))
+        plt.title("Isotermas para un ferromagneto en el modelo de ising en 2D", fontsize=14)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+        plt.plot(self.H, self.iso[6], label="T={}K".format(self.T), color="red")
+        #plt.plot(self.H, Iso2_1[6], label="T={}K".format(T2), color="blue")
+        #plt.plot(self.H, Iso3_1[6], label="T={}K".format(T3), color="green")
+        plt.xlabel("H", fontsize=20)
+        plt.ylabel("M", fontsize=20)
+        plt.legend(fontsize=15, loc="best")
+        plt.grid()
+        plt.show()
+
     # graficar configuraciones
     def plot_configuraciones(self):
         """
         Plots the initial, intermediate, and final configurations of spins.
         """
+        plt.figure(figsize=(12, 6))
+        plt.title('Snapshots de las Configuraciones')
         plt.subplot(1,3,1)
         plt.imshow(self.iso[1], extent=[0, self.L, 0, self.L], interpolation='nearest')
         plt.xlabel("x",fontsize=10)
         plt.ylabel("y",fontsize=10)
-        plt.title("Configuración inicial",fontsize=14)
+        plt.title("Configuración inicial",fontsize=10)
         plt.subplot(1,3,2)
         plt.imshow(self.iso[9], extent=[0, self.L, 0, self.L], interpolation='nearest')
         plt.xlabel("x",fontsize=10)
         plt.ylabel("y",fontsize=10)
-        plt.title("Configuración intermedia",fontsize=14)
+        plt.title("Configuración intermedia",fontsize=10)
         plt.subplot(1,3,3)
         plt.imshow(self.iso[3], extent=[0, self.L, 0, self.L], interpolation='nearest')
         plt.xlabel("x",fontsize=10)
         plt.ylabel("y",fontsize=10)
-        plt.title("Configuración final",fontsize=14)
+        plt.title("Configuración final",fontsize=10)
         plt.show()
 
         return
@@ -355,31 +373,34 @@ class IsingTemp(Ising2D):
             self.C[tt] = (self.n1 * E2 - self.n2 * E1 * E1) * iT2
             self.X[tt] = (self.n1 * M2 - self.n2 * M1 * M1) * iT
 
-        plt.figure(figsize=(8, 6))
+        plt.figure(figsize=(10, 6))
         plt.title('Energía vs Temperatura', fontsize = 15)
         plt.scatter(self.t_array,  self.E, s = 50, marker='o', label = 'Energía', color = 'IndianRed')
         plt.plot(self.t_array, gaussian_filter1d(self.E, sigma = 1), label = 'Ajuste', color = 'darkblue')
         plt.xlabel('Temperatura (K)', fontsize = 15)
         plt.ylabel('Energía', fontsize = 15)
+        plt.legend()
         plt.grid()
         plt.show()
 
-        plt.figure(figsize=(8, 6))
+        plt.figure(figsize=(10, 6))
         plt.title('Magnetización vs Temperatura', fontsize=15)
-        plt.scatter(self.t_array, abs(self.M), s=50, marker='o', label='Energía', color='IndianRed')
+        plt.scatter(self.t_array, abs(self.M), s=50, marker='o', label='Magnetización', color='IndianRed')
         plt.plot(self.t_array, gaussian_filter1d(abs(self.M), sigma=1), label='Ajuste', color='darkblue')
         plt.xlabel('Temperatura (K)', fontsize=15)
         plt.ylabel('Magnetización', fontsize=15)
+        plt.legend()
         plt.grid()
         plt.show()
 
-        plt.figure(figsize=(8, 6))
-        plt.title('Calor Especifíco vs Temperatura', fontsize=15)
-        plt.scatter(self.t_array, self.C, s=50, marker='o', label='Energía', color='IndianRed')
+        plt.figure(figsize=(10, 6))
+        plt.title('Capacidad Calorífica vs Temperatura', fontsize=15)
+        plt.scatter(self.t_array, self.C, s=50, marker='o', label='Capacidad Calorífica', color='IndianRed')
         plt.plot(self.t_array, gaussian_filter1d(self.C, sigma=1), label='Ajuste', color='darkblue')
         plt.xlabel('Temperatura (K)', fontsize=15)
-        plt.ylabel('Calor Especifíco', fontsize=15)
+        plt.ylabel('Capacidad Calorífica', fontsize=15)
         plt.grid()
+        plt.legend()
         plt.show()
 
 
