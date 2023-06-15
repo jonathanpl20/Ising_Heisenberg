@@ -373,6 +373,7 @@ class IsingTemp(Ising2D):
             self.C[tt] = (self.n1 * E2 - self.n2 * E1 * E1) * iT2
             self.X[tt] = (self.n1 * M2 - self.n2 * M1 * M1) * iT
 
+
         plt.figure(figsize=(10, 6))
         plt.title('Energía vs Temperatura', fontsize = 15)
         plt.scatter(self.t_array,  self.E, s = 50, marker='o', label = 'Energía', color = 'IndianRed')
@@ -393,6 +394,7 @@ class IsingTemp(Ising2D):
         plt.grid()
         plt.show()
 
+        print("La temperatura en la que se presenta el máximo es: ", self.t_array[np.where(self.C == max(self.C))])
         plt.figure(figsize=(10, 6))
         plt.title('Capacidad Calorífica vs Temperatura', fontsize=15)
         plt.scatter(self.t_array, self.C, s=50, marker='o', label='Capacidad Calorífica', color='IndianRed')
